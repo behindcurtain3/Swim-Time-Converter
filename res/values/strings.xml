@@ -6,6 +6,7 @@
     <string name="hundreths_label">hh</string>
     <string name="button_lc">Convert to LCM</string>
     <string name="button_sc">Convert to SCY</string>
+    <string name="button_convert">Convert</string>
     
     <string name="event_prompt">Event</string>
     <string name="from_prompt">From</string>
@@ -13,8 +14,9 @@
     
     <string name="empty">No Times Converted Yet</string>
     <string name="menu_clear">Clear Results</string>
-    <string name="yards">SCY</string>
-    <string name="meters">LCM</string>
+    <string name="SCY">SCY</string>
+    <string name="SCM">SCM</string>
+    <string name="LCM">LCM</string>
     <string name="mm_ss">:</string>
     <string name="ss_xx">.</string>
     <string name="conversion">equals</string>

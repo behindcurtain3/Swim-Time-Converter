@@ -18,6 +18,12 @@
 		<item>800/1000</item>
 		<item>1500/1650</item>
 	</string-array>
+	
+	<string-array name="conversions">
+		<item>Meters - Long Course</item>
+		<item>Meters - Short Course</item>
+		<item>Yards - Short Course</item>
+	</string-array>
 
 
     <string-array name="distances">

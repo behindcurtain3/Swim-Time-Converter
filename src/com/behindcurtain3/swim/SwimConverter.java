@@ -19,8 +19,44 @@ import android.widget.Toast;
 
 public class SwimConverter extends ListActivity {
 	public static final int CLEAR_LIST = Menu.FIRST;
+	
+	// Conversion factors
+	double conversionFactor = 1.11;
+	
+	// 50's
+	double fiftyBreast = 1.0;
+	double fiftyBack = 0.6;
+	double fiftyFly = 0.7;
+	double fiftyFree = 0.8;
+	
+	// 100's
+	double hundredFly = 1.4;
+	double hundredBack = 1.2;
+	double hundredBreast = 2.0;
+	double hundredFree = 1.6;
+	
+	// 200's
+	double twoHundredFly = 2.8;
+	double twoHundredBack = 2.4;
+	double twoHundredBreast = 4.0;
+	double twoHundredFree = 3.2;
+	double twoHundredIM = 3.2;
+	
+	// 400
+	double fourHundredIM = 6.4;
+	
+	// Distance, uses different calculation
+	double fourHundredEq = 0.8925;
+	double eightHundredEq = 0.8925;
+	double fifteenHundredEq = 1.02;
+	double fourHundred = 6.4;
+	double eightHundred = 12.8;
+	double fifteenHundred = 24.0;
+	
 	// Spinners
 	private Spinner mSpEvent;
+	private Spinner mSpFrom;
+	private Spinner mSpTo;
 	//private Spinner mSpDistance;
 	//private Spinner mSpStroke;
 	
@@ -30,8 +66,9 @@ public class SwimConverter extends ListActivity {
 	private EditText mEtHundreths;
 	
 	// Buttons
-	private Button mButtonLC;
-	private Button mButtonSC;
+	//private Button mButtonLC;
+	//private Button mButtonSC;
+	private Button mButtonConvert;
 	
 	// Database
 	private SwimDbAdapter mDbHelper;
@@ -49,13 +86,21 @@ public class SwimConverter extends ListActivity {
         mEtMinutes = (EditText)findViewById(R.id.input_minutes);
         mEtSeconds = (EditText)findViewById(R.id.input_seconds);
         mEtHundreths = (EditText)findViewById(R.id.input_hundreths);
-        mButtonLC = (Button)findViewById(R.id.button_lc);
-        mButtonSC = (Button)findViewById(R.id.button_sc);
+        mSpFrom = (Spinner)findViewById(R.id.from);
+        mSpTo = (Spinner)findViewById(R.id.to);
+        mButtonConvert = (Button)findViewById(R.id.button_convert);
+        //mButtonLC = (Button)findViewById(R.id.button_lc);
+        //mButtonSC = (Button)findViewById(R.id.button_sc);
         
         // Load the spinners with the arrays
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.events, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpEvent.setAdapter(adapter);
+        
+        adapter = ArrayAdapter.createFromResource(this, R.array.conversions, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpFrom.setAdapter(adapter);
+        mSpTo.setAdapter(adapter);
         
         //adapter = ArrayAdapter.createFromResource(this, R.array.strokes, android.R.layout.simple_spinner_item);
         //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -67,20 +112,15 @@ public class SwimConverter extends ListActivity {
         mEtHundreths.setInputType(InputType.TYPE_CLASS_NUMBER);
         
         // Setup the button listeners
-        mButtonLC.setOnClickListener(new OnClickListener(){
-			public void onClick(View arg0) {
-				createTime(false);
-			} 
-        });
         
-        mButtonSC.setOnClickListener(new OnClickListener(){
+        mButtonConvert.setOnClickListener(new OnClickListener(){
 			public void onClick(View arg0) {
-				createTime(true);
+				convertTime();
 			} 
-        });
+        });      
         
         // Setup ad's
-        //AdManager.setTestDevices(new String[] { AdManager.TEST_EMULATOR });
+        AdManager.setTestDevices(new String[] { AdManager.TEST_EMULATOR });
         AdView ad = (AdView)findViewById(R.id.ad);
         ad.setVisibility(View.VISIBLE);
         
@@ -120,150 +160,294 @@ public class SwimConverter extends ListActivity {
     }
     
     /*
-     * @args - toSC, true = LC -> SC, false = SC -> LC
+     * Run when the "convert" button is pushed.
+     * Reads the status of the "From" & "To" spinners and calls the appropriate function for the conversion.
+     * Takes the response from the conversion function and adds it the results db.
      */
-    private void createTime(boolean toSC)
-    {
+    private void convertTime() {
     	// Make sure some sort of numbers have been entered
-    	if(mEtMinutes.getText().length() == 0 || mEtSeconds.getText().length() == 0 || mEtHundreths.getText().length() == 0)
-    	{
-    		Toast.makeText(this, "Please enter a complete time.", Toast.LENGTH_SHORT).show();
+    	if(mEtMinutes.getText().length() == 0 && mEtSeconds.getText().length() == 0 && mEtHundreths.getText().length() == 0) {
+    		Toast.makeText(this, "Please enter a time.", Toast.LENGTH_SHORT).show();
     		return;
     	}
     	
-    	// Conversion factors
-    	double conversionFactor = 1.11;
+    	String[] choices = getResources().getStringArray(R.array.conversions); 	// Possible choices
+    	String from = (String)mSpFrom.getSelectedItem();
+    	String to = (String)mSpTo.getSelectedItem();
+    	String currentEvent = (String)mSpEvent.getSelectedItem();    			// Get whatever event the user selected
+    	String result; 
+    	String resultFrom;
+    	String resultTo;
     	
-    	// 50's
-    	double fiftyBreast = 1.0;
-    	double fiftyBack = 0.6;
-    	double fiftyFly = 0.7;
-    	double fiftyFree = 0.8;
-    	
-    	// 100's
-    	double hundredFly = 1.4;
-    	double hundredBack = 1.2;
-    	double hundredBreast = 2.0;
-    	double hundredFree = 1.6;
-    	
-    	// 200's
-    	double twoHundredFly = 2.8;
-    	double twoHundredBack = 2.4;
-    	double twoHundredBreast = 4.0;
-    	double twoHundredFree = 3.2;
-    	double twoHundredIM = 3.2;
-    	
-    	// 400
-    	double fourHundredIM = 6.4;
-    	
-    	// Distance, uses different calculation
-    	double fourHundred = 0.8925;
-    	double eightHundred = 0.8925;
-    	double fifteenHundred = 1.02;
-    	
-    	// Get whatever event the user selected
-    	String currentEvent = (String)mSpEvent.getSelectedItem();
-    	    	
+    	if(from.equals(to)){ // return if the inputs are the same
+    		Toast.makeText(this, "The pool lengths you've selected are the same.", Toast.LENGTH_SHORT).show();
+    		return;
+    	}
     	
     	// Setup the time the user input in seconds
-    	int minutes = Integer.parseInt(mEtMinutes.getText().toString(), 10);
-    	int seconds = Integer.parseInt(mEtSeconds.getText().toString(), 10);
-    	int hundreths = Integer.parseInt(mEtHundreths.getText().toString(), 10);
+    	int minutes;
+    	if(mEtMinutes.getText().length() == 0)
+    		minutes = 0;
+    	else 
+    		minutes = Integer.parseInt(mEtMinutes.getText().toString(), 10);
+    	
+    	int seconds;
+    	if(mEtSeconds.getText().length() == 0)
+    		seconds = 0;
+    	else
+    		seconds = Integer.parseInt(mEtSeconds.getText().toString(), 10);
+    	
+    	int hundreths;
+    	if(mEtHundreths.getText().length() == 0)
+    		hundreths = 0;
+    	else
+    		hundreths = Integer.parseInt(mEtHundreths.getText().toString(), 10);
     	
     	// We need the total seconds
     	double time = (minutes * 60) + (seconds) + ((double)hundreths / 100);
+    	double convertedTime = 0;
     	
-    	// switch the calculation based on the event
-    	if(currentEvent.equals("50 Fly"))
-    	{
-    		time = (toSC ? ((time - fiftyFly) / conversionFactor) : ((time * conversionFactor) + fiftyFly));
-    	} 
-    	else if (currentEvent.equals("50 Back"))
-    	{
-    		time = (toSC ? ((time - fiftyBack) / conversionFactor) : ((time * conversionFactor) + fiftyBack));
-    	}
-    	else if (currentEvent.equals("50 Breast"))
-    	{
-    		time = (toSC ? ((time - fiftyBreast) / conversionFactor) : ((time * conversionFactor) + fiftyBreast));
-    	}
-    	else if (currentEvent.equals("50 Free"))
-    	{
-    		time = (toSC ? ((time - fiftyFree) / conversionFactor) : ((time * conversionFactor) + fiftyFree));
-    	}
-    	else if (currentEvent.equals("100 Fly"))
-    	{
-    		time = (toSC ? ((time - hundredFly) / conversionFactor) : ((time * conversionFactor) + hundredFly));
-    	}
-    	else if (currentEvent.equals("100 Back"))
-    	{
-    		time = (toSC ? ((time - hundredBack) / conversionFactor) : ((time * conversionFactor) + hundredBack));
-    	}
-    	else if (currentEvent.equals("100 Breast"))
-    	{
-    		time = (toSC ? ((time - hundredBreast) / conversionFactor) : ((time * conversionFactor) + hundredBreast));
-    	}
-    	else if (currentEvent.equals("100 Free"))
-    	{
-    		time = (toSC ? ((time - hundredFree) / conversionFactor) : ((time * conversionFactor) + hundredFree));
-    	}
-    	else if (currentEvent.equals("200 Fly"))
-    	{
-    		time = (toSC ? ((time - twoHundredFly) / conversionFactor) : ((time * conversionFactor) + twoHundredFly));
-    	}
-    	else if (currentEvent.equals("200 Back"))
-    	{
-    		time = (toSC ? ((time - twoHundredBack) / conversionFactor) : ((time * conversionFactor) + twoHundredBack));
-    	}
-    	else if (currentEvent.equals("200 Breast"))
-    	{
-    		time = (toSC ? ((time - twoHundredBreast) / conversionFactor) : ((time * conversionFactor) + twoHundredBreast));
-    	}
-    	else if (currentEvent.equals("200 Free"))
-    	{
-    		time = (toSC ? ((time - twoHundredFree) / conversionFactor) : ((time * conversionFactor) + twoHundredFree));
-    	}
-    	else if (currentEvent.equals("200 IM"))
-    	{
-    		time = (toSC ? ((time - twoHundredIM) / conversionFactor) : ((time * conversionFactor) + twoHundredIM));
-    	}
-    	else if (currentEvent.equals("400 IM"))
-    	{
-    		time = (toSC ? ((time - fourHundredIM) / conversionFactor) : ((time * conversionFactor) + fourHundredIM));
-    	}
-    	else if (currentEvent.equals("400/500"))
-    	{
-    		time = (toSC ? (time / fourHundred) : (time * fourHundred));
-    	}
-    	else if (currentEvent.equals("800/1000"))
-    	{
-    		time = (toSC ? (time / eightHundred) : (time * eightHundred));
-    	}
-    	else if (currentEvent.equals("1500/1650"))
-    	{
-    		time = (toSC ? (time / fifteenHundred) : (time * fifteenHundred));
-    	}
-    	else // Not a valid selection
-    	{
+    	/* Possible calculations:
+    	 * LCM -> SCM
+    	 * LCM -> SCY
+    	 * SCM -> LCM
+    	 * SCM -> SCY
+    	 * SCY -> LCM
+    	 * SCY -> SCM
+    	 */
+    	if(from.equals(choices[0])){ // from LCM
+    		resultFrom = getString(R.string.LCM);
+    		
+    		if(to.equals(choices[1])){ // to SCM
+    			convertedTime = convertLCMtoSCM(currentEvent, time);
+    			resultTo = getString(R.string.SCM);
+    		} else if(to.equals(choices[2])){ // to SCY
+    			convertedTime = convertLCMtoSCY(currentEvent, time);
+    			resultTo = getString(R.string.SCY);
+    		} else
+    			return;
+    		
+    	} else if(from.equals(choices[1])){ // from SCM
+    		resultFrom = getString(R.string.SCM);
+    		
+    		if(to.equals(choices[0])){ // to LCM
+    			convertedTime = convertSCMtoLCM(currentEvent, time);
+    			resultTo = getString(R.string.LCM);
+    		} else if(to.equals(choices[2])){ // to SCY
+    			convertedTime = convertSCMtoSCY(currentEvent, time);
+    			resultTo = getString(R.string.SCY);
+    		} else
+    			return;
+    		
+    	} else if(from.equals(choices[2])){ // from SCY
+    		resultFrom = getString(R.string.SCY);
+    		
+    		if(to.equals(choices[0])){ // to LCM
+    			convertedTime = convertSCYtoLCM(currentEvent, time);
+    			resultTo = getString(R.string.LCM);
+    		} else if(to.equals(choices[1])){ // to SCM
+    			convertedTime = convertSCYtoSCM(currentEvent, time);
+    			resultTo = getString(R.string.SCM);
+    		} else
+    			return;
+    		
+    	} else // bad input
     		return;
-    	}
-    	
-    	// Do the conversion based on direction specified
-    	//time = (toSC ? (time/conversionFactor) : (time * conversionFactor));
     	
     	// Reformat the data
-    	int newMinutes = (int)(time / 60);
-    	int newSeconds = (int)(time % 60);
-    	int newHundreths = (int)((time - (newMinutes * 60) - newSeconds) * 100);
+    	int newMinutes = (int)(convertedTime / 60);
+    	int newSeconds = (int)(convertedTime % 60);
+    	int newHundreths = (int)((convertedTime - (newMinutes * 60) - newSeconds) * 100);
     	
     	// Format the data into a readable string
-    	String result;
-    	if(toSC)
-    		result = String.format("%s - %02d:%02d.%02d %s %s %02d:%02d.%02d %s", currentEvent, minutes, seconds, hundreths, getString(R.string.meters), getString(R.string.conversion), newMinutes, newSeconds, newHundreths, getString(R.string.yards));
-    	else
-    		result = String.format("%s - %02d:%02d.%02d %s %s %02d:%02d.%02d %s", currentEvent, minutes, seconds, hundreths, getString(R.string.yards), getString(R.string.conversion), newMinutes, newSeconds, newHundreths, getString(R.string.meters));
+    	result = String.format("%s - %02d:%02d.%02d %s %s %02d:%02d.%02d %s", currentEvent, minutes, seconds, hundreths, resultFrom, getString(R.string.conversion), newMinutes, newSeconds, newHundreths, resultTo);
     	
     	// Store the string
     	mDbHelper.createTime(result);
     	fillData();
+    	
     }
+    
+    private double convertLCMtoSCY(String currentEvent, double time) {
+    	if(currentEvent.equals("50 Fly"))
+    		time = (time - fiftyFly) / conversionFactor;
+    	else if (currentEvent.equals("50 Back"))
+    		time = (time - fiftyBack) / conversionFactor;
+    	else if (currentEvent.equals("50 Breast"))
+    		time = (time - fiftyBreast) / conversionFactor;
+    	else if (currentEvent.equals("50 Free"))
+    		time = (time - fiftyFree) / conversionFactor;
+    	else if (currentEvent.equals("100 Fly"))
+    		time = (time - hundredFly) / conversionFactor;
+    	else if (currentEvent.equals("100 Back"))
+    		time = (time - hundredBack) / conversionFactor;
+    	else if (currentEvent.equals("100 Breast"))
+    		time = (time - hundredBreast) / conversionFactor;
+    	else if (currentEvent.equals("100 Free"))
+    		time = (time - hundredFree) / conversionFactor;
+    	else if (currentEvent.equals("200 Fly"))
+    		time = (time - twoHundredFly) / conversionFactor;
+    	else if (currentEvent.equals("200 Back"))
+    		time = (time - twoHundredBack) / conversionFactor;
+    	else if (currentEvent.equals("200 Breast"))
+    		time = (time - twoHundredBreast) / conversionFactor;
+    	else if (currentEvent.equals("200 Free"))
+    		time = (time - twoHundredFree) / conversionFactor;
+    	else if (currentEvent.equals("200 IM"))
+    		time = (time - twoHundredIM) / conversionFactor;
+    	else if (currentEvent.equals("400 IM"))
+    		time = (time - fourHundredIM) / conversionFactor;
+    	else if (currentEvent.equals("400/500"))
+    		time /= fourHundredEq;
+    	else if (currentEvent.equals("800/1000"))
+    		time /= eightHundredEq;
+    	else if (currentEvent.equals("1500/1650"))
+    		time /= fifteenHundredEq;
+    	
+    	return time;
+	}
+    
+    private double convertLCMtoSCM(String currentEvent, double time) {
+    	if(currentEvent.equals("50 Fly"))
+    		time -= fiftyFly;
+    	else if (currentEvent.equals("50 Back"))
+    		time -= fiftyBack;
+    	else if (currentEvent.equals("50 Breast"))
+    		time -= fiftyBreast;
+    	else if (currentEvent.equals("50 Free"))
+    		time -= fiftyFree;
+    	else if (currentEvent.equals("100 Fly"))
+    		time -= hundredFly;
+    	else if (currentEvent.equals("100 Back"))
+    		time -= hundredBack;
+    	else if (currentEvent.equals("100 Breast"))
+    		time -= hundredBreast;
+    	else if (currentEvent.equals("100 Free"))
+    		time -= hundredFree;
+    	else if (currentEvent.equals("200 Fly"))
+    		time -= twoHundredFly;
+    	else if (currentEvent.equals("200 Back"))
+    		time -= twoHundredBack;
+    	else if (currentEvent.equals("200 Breast"))
+    		time -= twoHundredBreast;
+    	else if (currentEvent.equals("200 Free"))
+    		time -= twoHundredFree;
+    	else if (currentEvent.equals("200 IM"))
+    		time -= twoHundredIM;
+    	else if (currentEvent.equals("400 IM"))
+    		time -= fourHundredIM;
+    	else if (currentEvent.equals("400/500"))
+    		time -= fourHundred;
+    	else if (currentEvent.equals("800/1000"))
+    		time -= eightHundred;
+    	else if (currentEvent.equals("1500/1650"))
+    		time -= fifteenHundred;
+    	
+    	return time;
+	}
+
+    private double convertSCMtoLCM(String currentEvent, double time) {
+    	if(currentEvent.equals("50 Fly"))
+    		time += fiftyFly;
+    	else if (currentEvent.equals("50 Back"))
+    		time += fiftyBack;
+    	else if (currentEvent.equals("50 Breast"))
+    		time += fiftyBreast;
+    	else if (currentEvent.equals("50 Free"))
+    		time += fiftyFree;
+    	else if (currentEvent.equals("100 Fly"))
+    		time += hundredFly;
+    	else if (currentEvent.equals("100 Back"))
+    		time += hundredBack;
+    	else if (currentEvent.equals("100 Breast"))
+    		time += hundredBreast;
+    	else if (currentEvent.equals("100 Free"))
+    		time += hundredFree;
+    	else if (currentEvent.equals("200 Fly"))
+    		time += twoHundredFly;
+    	else if (currentEvent.equals("200 Back"))
+    		time += twoHundredBack;
+    	else if (currentEvent.equals("200 Breast"))
+    		time += twoHundredBreast;
+    	else if (currentEvent.equals("200 Free"))
+    		time += twoHundredFree;
+    	else if (currentEvent.equals("200 IM"))
+    		time += twoHundredIM;
+    	else if (currentEvent.equals("400 IM"))
+    		time += fourHundredIM;
+    	else if (currentEvent.equals("400/500"))
+    		time += fourHundred;
+    	else if (currentEvent.equals("800/1000"))
+    		time += eightHundred;
+    	else if (currentEvent.equals("1500/1650"))
+    		time += fifteenHundred;
+    	
+    	return time;
+	}
+
+    private double convertSCMtoSCY(String currentEvent, double time) {
+    	if (currentEvent.equals("400/500"))
+    		time = (time + fourHundred) / fourHundredEq;
+    	else if (currentEvent.equals("800/1000"))
+    		time = (time + eightHundred) / eightHundredEq;
+    	else if (currentEvent.equals("1500/1650"))
+    		time = (time + fifteenHundred) / fifteenHundredEq;
+    	else
+    		time /= conversionFactor;
+    	
+    	return time;
+	}
+    
+    private double convertSCYtoLCM(String currentEvent, double time) {
+    	if(currentEvent.equals("50 Fly"))
+    		time = (time * conversionFactor) + fiftyFly;
+    	else if (currentEvent.equals("50 Back"))
+    		time = (time * conversionFactor) + fiftyBack;
+    	else if (currentEvent.equals("50 Breast"))
+    		time = (time * conversionFactor) + fiftyBreast;
+    	else if (currentEvent.equals("50 Free"))
+    		time = (time * conversionFactor) + fiftyFree;
+    	else if (currentEvent.equals("100 Fly"))
+    		time = (time * conversionFactor) + hundredFly;
+    	else if (currentEvent.equals("100 Back"))
+    		time = (time * conversionFactor) + hundredBack;
+    	else if (currentEvent.equals("100 Breast"))
+    		time = (time * conversionFactor) + hundredBreast;
+    	else if (currentEvent.equals("100 Free"))
+    		time = (time * conversionFactor) + hundredFree;
+    	else if (currentEvent.equals("200 Fly"))
+    		time = (time * conversionFactor) + twoHundredFly;
+    	else if (currentEvent.equals("200 Back"))
+    		time = (time * conversionFactor) + twoHundredBack;
+    	else if (currentEvent.equals("200 Breast"))
+    		time = (time * conversionFactor) + twoHundredBreast;
+    	else if (currentEvent.equals("200 Free"))
+    		time = (time * conversionFactor) + twoHundredFree;
+    	else if (currentEvent.equals("200 IM"))
+    		time = (time * conversionFactor) + twoHundredIM;
+    	else if (currentEvent.equals("400 IM"))
+    		time = (time * conversionFactor) + fourHundredIM;
+    	else if (currentEvent.equals("400/500"))
+    		time *= fourHundredEq;
+    	else if (currentEvent.equals("800/1000"))
+    		time *= eightHundredEq;
+    	else if (currentEvent.equals("1500/1650"))
+    		time *= fifteenHundredEq;
+    	
+    	return time;
+	}
+    
+    private double convertSCYtoSCM(String currentEvent, double time) {
+    	if (currentEvent.equals("400/500"))
+    		time = (time * fourHundredEq) - fourHundred;
+    	else if (currentEvent.equals("800/1000"))
+    		time = (time * eightHundredEq) - eightHundred;
+    	else if (currentEvent.equals("1500/1650"))
+    		time = (time * fifteenHundredEq) - fifteenHundred;
+    	else
+    		time *= conversionFactor;
+    	
+    	return time;
+	}
+    
 }

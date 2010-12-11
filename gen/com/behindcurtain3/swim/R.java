@@ -9,9 +9,10 @@ package com.behindcurtain3.swim;
 
 public final class R {
     public static final class array {
-        public static final int distances=0x7f040001;
+        public static final int conversions=0x7f040001;
+        public static final int distances=0x7f040002;
         public static final int events=0x7f040000;
-        public static final int strokes=0x7f040002;
+        public static final int strokes=0x7f040003;
     }
     public static final class attr {
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
@@ -62,9 +63,10 @@ containing a value of this type.
         public static final int ic_swimconverter=0x7f020000;
     }
     public static final class id {
-        public static final int ad=0x7f06000a;
+        public static final int ad=0x7f06000b;
+        public static final int button_convert=0x7f060009;
         public static final int event=0x7f060006;
-        public static final int frame_result_text=0x7f060009;
+        public static final int frame_result_text=0x7f06000a;
         public static final int frame_time=0x7f060002;
         public static final int frame_top=0x7f060001;
         public static final int from=0x7f060007;
@@ -79,24 +81,26 @@ containing a value of this type.
         public static final int main=0x7f030001;
     }
     public static final class string {
+        public static final int LCM=0x7f05000e;
+        public static final int SCM=0x7f05000d;
+        public static final int SCY=0x7f05000c;
         public static final int app_name=0x7f050000;
+        public static final int button_convert=0x7f050006;
         public static final int button_lc=0x7f050004;
         public static final int button_sc=0x7f050005;
-        public static final int conversion=0x7f05000f;
-        public static final int empty=0x7f050009;
-        public static final int event_prompt=0x7f050006;
-        public static final int frame_result=0x7f050011;
-        public static final int frame_top=0x7f050010;
-        public static final int from_prompt=0x7f050007;
+        public static final int conversion=0x7f050011;
+        public static final int empty=0x7f05000a;
+        public static final int event_prompt=0x7f050007;
+        public static final int frame_result=0x7f050013;
+        public static final int frame_top=0x7f050012;
+        public static final int from_prompt=0x7f050008;
         public static final int hundreths_label=0x7f050003;
-        public static final int menu_clear=0x7f05000a;
-        public static final int meters=0x7f05000c;
+        public static final int menu_clear=0x7f05000b;
         public static final int minute_label=0x7f050001;
-        public static final int mm_ss=0x7f05000d;
+        public static final int mm_ss=0x7f05000f;
         public static final int second_label=0x7f050002;
-        public static final int ss_xx=0x7f05000e;
-        public static final int to_prompt=0x7f050008;
-        public static final int yards=0x7f05000b;
+        public static final int ss_xx=0x7f050010;
+        public static final int to_prompt=0x7f050009;
     }
     public static final class styleable {
         /** Attributes that can be used with a com_admob_android_ads_AdView.
