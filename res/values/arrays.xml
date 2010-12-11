@@ -1,0 +1,41 @@
+<resources>
+	<string-array name="events">
+		<item>50 Free</item>
+		<item>50 Fly</item>
+		<item>50 Back</item>		
+		<item>50 Breast</item>
+		<item>100 Free</item>
+		<item>100 Fly</item>
+		<item>100 Back</item>		
+		<item>100 Breast</item>
+		<item>200 Free</item>
+		<item>200 Fly</item>
+		<item>200 Back</item>		
+		<item>200 Breast</item>
+		<item>200 IM</item>
+		<item>400 IM</item>
+		<item>400/500</item>
+		<item>800/1000</item>
+		<item>1500/1650</item>
+	</string-array>
+
+
+    <string-array name="distances">
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+        <item>400</item>
+        <item>400/500</item>
+        <item>800/1000</item>
+        <item>1500/1650</item>
+    </string-array>
+    
+    <string-array name="strokes">
+    	<item>Fly</item>
+    	<item>Breast</item>
+    	<item>Back</item>
+    	<item>Free</item>
+    	<item>IM</item>
+    </string-array>
+    
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Swim Time Converter</string>
+    <string name="minute_label">mm</string>
+    <string name="second_label">ss</string>
+    <string name="hundreths_label">hh</string>
+    <string name="button_lc">Convert to LCM</string>
+    <string name="button_sc">Convert to SCY</string>
+    
+    <string name="event_prompt">Event</string>
+    <string name="from_prompt">From</string>
+    <string name="to_prompt">To</string>
+    
+    <string name="empty">No Times Converted Yet</string>
+    <string name="menu_clear">Clear Results</string>
+    <string name="yards">SCY</string>
+    <string name="meters">LCM</string>
+    <string name="mm_ss">:</string>
+    <string name="ss_xx">.</string>
+    <string name="conversion">equals</string>
+    <string name="frame_top">Time &amp; Event</string>
+    <string name="frame_result">Results</string>
+</resources>

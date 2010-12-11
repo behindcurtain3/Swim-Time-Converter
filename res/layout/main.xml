@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout  
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent" 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myapp="http://schemas.android.com/apk/res/com.behindcurtain3.swim"
+	android:padding="0dp">
+
+	<!-- Top frame -->		
+	<TextView
+		android:id="@+id/frame_top"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/frame_top"
+		android:textStyle="bold"
+		android:textSize="18sp"
+		android:textColor="#222222"
+		android:background="#999999" />
+		
+	<LinearLayout
+		android:id="@+id/frame_time"
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:padding="4dp"
+		android:background="#cccccc"
+		android:layout_below="@+id/frame_top">		
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:gravity="fill_horizontal">
+	
+			<EditText
+				android:id="@+id/input_minutes"
+				android:layout_width="55dp"
+				android:layout_height="wrap_content" 
+				android:hint="@string/minute_label"
+				android:singleLine="true"
+				android:maxLength="2" />
+			
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/mm_ss"
+				android:textSize="18sp"
+				android:textColor="#222222" />
+			
+			<EditText
+				android:id="@+id/input_seconds"
+				android:layout_width="55dp"
+				android:layout_height="wrap_content"
+				android:hint="@string/second_label"
+				android:singleLine="true" 
+				android:maxLength="2" />
+				
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/ss_xx" 
+				android:textSize="18sp" 
+				android:textColor="#222222" />
+				
+			<EditText
+				android:id="@+id/input_hundreths"
+				android:layout_width="55dp"
+				android:layout_height="wrap_content" 
+				android:hint="@string/hundreths_label" 
+				android:singleLine="true" 
+				android:maxLength="2" />
+				
+			<Spinner
+				android:id="@+id/event"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:prompt="@string/event_prompt"
+				android:layout_gravity="right" />
+			
+		</LinearLayout>
+	
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:gravity="fill_horizontal">
+		
+			<Spinner
+				android:id="@+id/from"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:prompt="@string/from_prompt"
+				android:layout_weight="1" />
+			
+			<Spinner
+				android:id="@+id/to"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:prompt="@string/to_prompt"
+				android:layout_weight="1" />
+		
+			<!-- 
+			<Button
+				android:id="@+id/button_lc"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/button_lc" 
+				android:layout_weight="1" />
+				
+			<Button
+				android:id="@+id/button_sc"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/button_sc"
+				android:layout_weight="1" />
+			-->
+		</LinearLayout>
+	</LinearLayout>
+		
+	<TextView
+		android:id="@+id/frame_result_text"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:layout_below="@+id/frame_time"
+		
+		android:text="@string/frame_result"
+		android:textStyle="bold"
+		android:textSize="18sp"
+		android:textColor="#222222"
+		android:background="#999999" />
+		
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:layout_below="@+id/frame_result_text"
+		android:gravity="center_horizontal"
+		android:background="#cccccc">
+	
+		<ListView
+			android:id="@android:id/list"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent" />
+		<TextView
+			android:id="@android:id/empty"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent" 
+			android:text="@string/empty"
+			android:gravity="center"
+			android:textColor="#222222" />	
+
+	</LinearLayout>
+		
+	
+	
+	
+	<!-- Ad frame, at bottom -->
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_weight="1"
+		android:layout_alignParentBottom="true"
+		android:gravity="bottom">
+	
+		<com.admob.android.ads.AdView     
+           android:id="@+id/ad" 
+           android:layout_width="fill_parent" 
+           android:layout_height="wrap_content"
+           myapp:backgroundColor="#000000"
+           myapp:primaryTextColor="#FFFFFF"
+           myapp:secondaryTextColor="#CCCCCC"  />                        
+	</LinearLayout>					
+	
+</RelativeLayout>
