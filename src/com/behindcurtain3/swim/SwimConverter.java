@@ -57,8 +57,6 @@ public class SwimConverter extends ListActivity {
 	private Spinner mSpEvent;
 	private Spinner mSpFrom;
 	private Spinner mSpTo;
-	//private Spinner mSpDistance;
-	//private Spinner mSpStroke;
 	
 	// Text inputs
 	private EditText mEtMinutes;
@@ -66,8 +64,6 @@ public class SwimConverter extends ListActivity {
 	private EditText mEtHundreths;
 	
 	// Buttons
-	//private Button mButtonLC;
-	//private Button mButtonSC;
 	private Button mButtonConvert;
 	
 	// Database
@@ -80,8 +76,6 @@ public class SwimConverter extends ListActivity {
         setContentView(R.layout.main);
         
         // Bind our variables to the interface items
-        //mSpDistance = (Spinner)findViewById(R.id.distance);
-        //mSpStroke = (Spinner)findViewById(R.id.stroke);
         mSpEvent = (Spinner)findViewById(R.id.event);
         mEtMinutes = (EditText)findViewById(R.id.input_minutes);
         mEtSeconds = (EditText)findViewById(R.id.input_seconds);
@@ -89,8 +83,6 @@ public class SwimConverter extends ListActivity {
         mSpFrom = (Spinner)findViewById(R.id.from);
         mSpTo = (Spinner)findViewById(R.id.to);
         mButtonConvert = (Button)findViewById(R.id.button_convert);
-        //mButtonLC = (Button)findViewById(R.id.button_lc);
-        //mButtonSC = (Button)findViewById(R.id.button_sc);
         
         // Load the spinners with the arrays
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.events, android.R.layout.simple_spinner_item);
@@ -101,10 +93,6 @@ public class SwimConverter extends ListActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpFrom.setAdapter(adapter);
         mSpTo.setAdapter(adapter);
-        
-        //adapter = ArrayAdapter.createFromResource(this, R.array.strokes, android.R.layout.simple_spinner_item);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //mSpStroke.setAdapter(adapter);
         
         // Restrict the input fields to numbers only
         mEtMinutes.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -120,7 +108,7 @@ public class SwimConverter extends ListActivity {
         });      
         
         // Setup ad's
-        AdManager.setTestDevices(new String[] { AdManager.TEST_EMULATOR });
+        //AdManager.setTestDevices(new String[] { AdManager.TEST_EMULATOR });
         AdView ad = (AdView)findViewById(R.id.ad);
         ad.setVisibility(View.VISIBLE);
         
