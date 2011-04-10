@@ -179,15 +179,16 @@
 		android:layout_height="fill_parent"
 		android:layout_weight="1"
 		android:layout_alignParentBottom="true"
-		android:gravity="bottom">
-	
+		android:gravity="bottom"
+		android:id="@+id/ad">
+		<!-- 
 		<com.admob.android.ads.AdView     
            android:id="@+id/ad" 
            android:layout_width="fill_parent" 
            android:layout_height="wrap_content"
            myapp:backgroundColor="#000000"
            myapp:primaryTextColor="#FFFFFF"
-           myapp:secondaryTextColor="#CCCCCC"  />                        
+           myapp:secondaryTextColor="#CCCCCC"  /> -->                        
 	</LinearLayout>					
 	
 </RelativeLayout>

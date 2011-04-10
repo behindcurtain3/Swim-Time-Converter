@@ -1,7 +1,5 @@
 package com.behindcurtain3.swim;
 
-import com.admob.android.ads.AdManager;
-import com.admob.android.ads.AdView;
 import android.app.ListActivity;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -13,9 +11,14 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 
 public class SwimConverter extends ListActivity {
 	public static final int CLEAR_LIST = Menu.FIRST;
@@ -108,9 +111,13 @@ public class SwimConverter extends ListActivity {
         });      
         
         // Setup ad's
-        //AdManager.setTestDevices(new String[] { AdManager.TEST_EMULATOR });
-        AdView ad = (AdView)findViewById(R.id.ad);
-        ad.setVisibility(View.VISIBLE);
+        AdView ad = new AdView(this, AdSize.BANNER, "a14c718035ad191");
+        LinearLayout adLayout = (LinearLayout)findViewById(R.id.ad);
+        adLayout.addView(ad);
+        
+        AdRequest request = new AdRequest();
+        request.setTesting(true);
+        ad.loadAd(request);
         
         mDbHelper = new SwimDbAdapter(this);
         mDbHelper.open();        
