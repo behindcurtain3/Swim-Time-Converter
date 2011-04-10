@@ -116,7 +116,7 @@ public class SwimConverter extends ListActivity {
         adLayout.addView(ad);
         
         AdRequest request = new AdRequest();
-        request.setTesting(true);
+        //request.setTesting(true);
         ad.loadAd(request);
         
         mDbHelper = new SwimDbAdapter(this);
