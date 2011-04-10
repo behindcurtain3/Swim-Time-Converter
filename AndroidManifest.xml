@@ -17,9 +17,6 @@
         
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation"/>
-        
-        <!-- The application's publisher ID assigned by AdMob -->
-        <meta-data android:value="a14c718035ad191" android:name="ADMOB_PUBLISHER_ID" />
     </application>
 
 	<!-- AdMob SDK permissions -->
