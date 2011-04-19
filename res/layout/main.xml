@@ -99,22 +99,6 @@
 				android:layout_height="wrap_content"
 				android:prompt="@string/to_prompt"
 				android:layout_weight="1" />
-		
-			<!-- 
-			<Button
-				android:id="@+id/button_lc"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/button_lc" 
-				android:layout_weight="1" />
-				
-			<Button
-				android:id="@+id/button_sc"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/button_sc"
-				android:layout_weight="1" />
-			-->
 		</LinearLayout>
 		
 		<LinearLayout
